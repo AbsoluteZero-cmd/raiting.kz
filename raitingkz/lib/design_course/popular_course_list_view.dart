@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'design_course_app_theme.dart';
@@ -244,7 +245,8 @@ class CategoryView extends StatelessWidget {
                                 const BorderRadius.all(Radius.circular(16.0)),
                             child: AspectRatio(
                                 aspectRatio: 1.28,
-                                child: Image.network(category!.imagePath)),
+                                child: CachedNetworkImage(
+                                    imageUrl: category!.imagePath)),
                           ),
                         ),
                       ),
