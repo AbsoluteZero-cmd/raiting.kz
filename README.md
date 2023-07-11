@@ -1,0 +1,2 @@
+# raiting.kz
+ 

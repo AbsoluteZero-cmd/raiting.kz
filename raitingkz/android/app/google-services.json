@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "907140188768",
+    "firebase_url": "https://raitingkz-9c685-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "raitingkz-9c685",
+    "storage_bucket": "raitingkz-9c685.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907140188768:android:84a250fb2582e4c6695105",
+        "android_client_info": {
+          "package_name": "com.example.raitingkz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907140188768-2poukavlv13tu6fmk7ggfd2pnvi3bj0m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7kYF1D_Dgi_SU5JtaAZg95La4JMnfDGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907140188768-2poukavlv13tu6fmk7ggfd2pnvi3bj0m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "907140188768-jgjff5g38m12vm2mubf65ju3j96utn55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.raitingkz.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
