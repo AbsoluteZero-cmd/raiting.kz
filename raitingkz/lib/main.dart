@@ -4,7 +4,7 @@ import 'login_screen.dart';
 import 'app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb; 
 import 'design_course/design_course_app_theme.dart';
 import 'design_course/home_design_course.dart';
 import 'firebase_options.dart';
