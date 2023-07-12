@@ -7,6 +7,14 @@ class Auth {
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
+  Future<void> updateUserName({required String name}) async {
+    _firebaseAuth.currentUser!.updateDisplayName(name);
+  }
+
+  Future<void> updateUserImage({required String imageUrl}) async {
+    _firebaseAuth.currentUser!.updatePhotoURL(imageUrl);
+  }
+
   Future<void> sendPasswordResetEmail({
     required String email,
   }) async {

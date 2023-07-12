@@ -30,7 +30,9 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
     categories.clear();
     DatabaseReference reference = FirebaseDatabase.instance.ref("/courses");
     final result = await reference.get();
+    print('my result ${result.value}');
     for (var element in result.children) {
+      print('my element ${element.value}');
       final category =
           Category.fromMap(Map<String, dynamic>.from(element.value as Map));
       print('popular ${category.toMap()}');

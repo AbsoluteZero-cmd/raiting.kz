@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import '../auth.dart';
 import '../user_profile.dart';
 
 import 'category_list_view.dart';
@@ -17,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   CategoryType categoryType = CategoryType.ui;
+  final User? currentUser = Auth().currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -314,8 +317,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 50,
                 height: 50,
                 child: CircleAvatar(
-                  backgroundImage:
-                      AssetImage('assets/design_course/userImage.jpg'),
+                  backgroundImage: NetworkImage(
+                    currentUser!.photoURL ??
+                        'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg',
+                  ),
                   backgroundColor: Colors.black,
                   radius: 20,
                 )),

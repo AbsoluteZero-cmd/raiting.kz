@@ -6,22 +6,30 @@ import 'design_course/home_design_course.dart';
 
 import 'design_course/design_course_app_theme.dart';
 
-class UserProfile extends StatelessWidget {
+class UserProfile extends StatefulWidget {
   UserProfile({super.key});
+
+  @override
+  State<UserProfile> createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
   final User? currentUser = Auth().currentUser;
+  bool isEditiingMode = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       body: Stack(
         children: [
           Align(
             alignment: Alignment.topCenter,
             child: AspectRatio(
               aspectRatio: 1.2,
-              child: Image.asset(
-                'assets/design_course/webInterFace.png',
-                color: DesignCourseAppTheme.nearlyBlue,
+              child: Image.network(
+                'https://wallpapers.com/images/hd/red-space-mcxalhp0kh9ivlp6.jpg',
+                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -29,8 +37,14 @@ class UserProfile extends StatelessWidget {
             top: 32.0,
             right: 12.0,
             child: IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {},
+              icon: Icon(
+                Icons.edit,
+              ),
+              onPressed: () {
+                setState(() {
+                  isEditiingMode = !isEditiingMode;
+                });
+              },
             ),
           ),
           Positioned(
@@ -39,8 +53,7 @@ class UserProfile extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => HomeScreen()));
+                Navigator.pop(context);
               },
             ),
           ),
@@ -50,10 +63,24 @@ class UserProfile extends StatelessWidget {
             child: Container(
               height: 150,
               width: 150,
-              child: CircleAvatar(
-                backgroundImage:
-                    AssetImage('assets/design_course/userImage.jpg'),
-              ),
+              decoration: BoxDecoration(
+                  color: DesignCourseAppTheme.nearlyBlue,
+                  borderRadius: BorderRadius.all(Radius.circular(1000))),
+              child: isEditiingMode
+                  ? GestureDetector(
+                      onTap: changeUserImage,
+                      child: CircleAvatar(
+                          child: Icon(
+                        Icons.photo,
+                        size: 30,
+                      )),
+                    )
+                  : CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        currentUser!.photoURL ??
+                            'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg',
+                      ),
+                    ),
             ),
           ),
           Align(
@@ -109,5 +136,9 @@ class UserProfile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void changeUserImage() {
+    
   }
 }
