@@ -1,15 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import 'course_info_screen.dart';
 import 'design_course_app_theme.dart';
 import 'models/category.dart';
 import '../main.dart';
 import 'package:flutter/material.dart';
 
 class PopularCourseListView extends StatefulWidget {
-  const PopularCourseListView({Key? key, this.callBack}) : super(key: key);
+  const PopularCourseListView({Key? key}) : super(key: key);
 
-  final Function()? callBack;
   @override
   _PopularCourseListViewState createState() => _PopularCourseListViewState();
 }
@@ -28,7 +28,8 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
 
   Future<bool> getData() async {
     categories.clear();
-    DatabaseReference reference = FirebaseDatabase.instance.ref("/courses");
+    DatabaseReference reference =
+        FirebaseDatabase.instance.ref("/popular_courses");
     final result = await reference.get();
     for (var element in result.children) {
       final category =
@@ -66,7 +67,6 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                   );
                   animationController?.forward();
                   return CategoryView(
-                    callback: widget.callBack,
                     category: categories[index],
                     animation: animation,
                     animationController: animationController,
@@ -90,16 +90,25 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
 class CategoryView extends StatelessWidget {
   const CategoryView(
       {Key? key,
-      this.category,
+      required this.category,
       this.animationController,
-      this.animation,
-      this.callback})
+      this.animation})
       : super(key: key);
 
-  final VoidCallback? callback;
-  final Category? category;
+  final Category category;
   final AnimationController? animationController;
   final Animation<double>? animation;
+
+  void moveTo(BuildContext context, Category category) {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => CourseInfoScreen(
+          category: category,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +122,9 @@ class CategoryView extends StatelessWidget {
                 0.0, 50 * (1.0 - animation!.value), 0.0),
             child: InkWell(
               splashColor: Colors.transparent,
-              onTap: callback,
+              onTap: () {
+                moveTo(context, category);
+              },
               child: SizedBox(
                 height: 280,
                 child: Stack(

@@ -1,17 +1,26 @@
 class Category {
-  Category({
-    this.title = '',
-    this.imagePath = '',
-    this.lessonCount = 0,
-    this.money = 0,
-    this.rating = 0.0,
-  });
-
   String title;
   int lessonCount;
   int money;
+  int availableSeats;
+  double lessonDuration;
   double rating;
   String imagePath;
+  String description;
+  String categoryType;
+
+  static List<String> categoryTypes = ["IT", "Подача", "Школы"];
+
+  Category(
+      {this.title = '',
+      this.imagePath = '',
+      this.lessonCount = 0,
+      this.money = 0,
+      this.rating = 0.0,
+      this.availableSeats = 0,
+      this.lessonDuration = 0,
+      this.description = '',
+      this.categoryType = ''});
 
   Map<String, dynamic> toMap() {
     return {
@@ -20,6 +29,10 @@ class Category {
       'lessonCount': lessonCount,
       'money': money,
       'rating': rating,
+      'availableSeats': availableSeats,
+      'lessonDuration': lessonDuration,
+      "description": description,
+      "categoryType": categoryType,
     };
   }
 
@@ -28,25 +41,9 @@ class Category {
         lessonCount = addressMap['lessonCount'],
         money = addressMap['money'],
         rating = addressMap['rating'],
+        availableSeats = addressMap['availableSeats'],
+        lessonDuration = addressMap['lessonDuration'],
+        description = addressMap['description'],
+        categoryType = addressMap['categoryType'],
         imagePath = addressMap['imagePath'];
-
-  static List<Category> categoryList = <Category>[
-    Category(
-      imagePath: 'assets/design_course/interFace1.png',
-      title: 'UX/UI дизайн',
-      lessonCount: 24,
-      money: 25,
-      rating: 4.3,
-    ),
-  ];
-
-  static List<Category> popularCourseList = <Category>[
-    Category(
-      imagePath: 'assets/design_course/interFace3.png',
-      title: 'Мобильная разработка',
-      lessonCount: 12,
-      money: 25,
-      rating: 4.8,
-    ),
-  ];
 }

@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'design_course_app_theme.dart';
+import 'models/category.dart';
 
 class CourseInfoScreen extends StatefulWidget {
+  const CourseInfoScreen({Key? key, required this.category}) : super(key: key);
+  final Category category;
   @override
   _CourseInfoScreenState createState() => _CourseInfoScreenState();
 }
@@ -56,7 +60,8 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
               children: <Widget>[
                 AspectRatio(
                   aspectRatio: 1.2,
-                  child: Image.asset('assets/design_course/webInterFace.png'),
+                  child:
+                      CachedNetworkImage(imageUrl: widget.category.imagePath),
                 ),
               ],
             ),
@@ -95,7 +100,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                             padding: const EdgeInsets.only(
                                 top: 32.0, left: 18, right: 16),
                             child: Text(
-                              'Курс\nВеб-дизайна',
+                              widget.category.title,
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -113,7 +118,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '5000 тг.',
+                                  '${widget.category.money} тг.',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w200,
@@ -126,7 +131,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   child: Row(
                                     children: <Widget>[
                                       Text(
-                                        '4.3',
+                                        widget.category.rating.toString(),
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w200,
@@ -153,9 +158,15 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                               padding: const EdgeInsets.all(8),
                               child: Row(
                                 children: <Widget>[
-                                  getTimeBoxUI('24', 'Уроков'),
-                                  getTimeBoxUI('2 часа', 'Время'),
-                                  getTimeBoxUI('24', 'Места'),
+                                  getTimeBoxUI(
+                                      widget.category.lessonCount.toString(),
+                                      'Уроков'),
+                                  getTimeBoxUI(
+                                      widget.category.lessonDuration.toString(),
+                                      'Время'),
+                                  getTimeBoxUI(
+                                      widget.category.availableSeats.toString(),
+                                      'Места'),
                                 ],
                               ),
                             ),
@@ -168,7 +179,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                 padding: const EdgeInsets.only(
                                     left: 16, right: 16, top: 8, bottom: 8),
                                 child: Text(
-                                  'Lorem ipsum is simply dummy text of printing & typesetting industry, Lorem ipsum is simply dummy text of printing & typesetting industry.',
+                                  widget.category.description,
                                   textAlign: TextAlign.justify,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w200,
@@ -362,3 +373,4 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
     );
   }
 }
+

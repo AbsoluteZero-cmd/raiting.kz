@@ -1,15 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import 'course_info_screen.dart';
 import 'design_course_app_theme.dart';
 import 'models/category.dart';
 import '../main.dart';
 import 'package:flutter/material.dart';
 
 class CategoryListView extends StatefulWidget {
-  const CategoryListView({Key? key, this.callBack}) : super(key: key);
-
-  final Function()? callBack;
+  final String categoryType;
+  const CategoryListView({Key? key, required this.categoryType})
+      : super(key: key);
   @override
   _CategoryListViewState createState() => _CategoryListViewState();
 }
@@ -17,8 +18,7 @@ class CategoryListView extends StatefulWidget {
 class _CategoryListViewState extends State<CategoryListView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  final List<Category> categories = [];
-
+  List<Category>? categories = [];
   @override
   void initState() {
     animationController = AnimationController(
@@ -27,16 +27,19 @@ class _CategoryListViewState extends State<CategoryListView>
   }
 
   Future<bool> getData() async {
-    categories.clear();
+    categories = [];
     DatabaseReference reference = FirebaseDatabase.instance.ref("/courses");
     final result = await reference.get();
 
     for (var element in result.children) {
       final category =
           Category.fromMap(Map<String, dynamic>.from(element.value as Map));
-      categories.add(category);
+      if (category.categoryType == widget.categoryType) {
+        categories!.add(category);
+      }
     }
 
+    categories!.toSet().toList();
     return true;
   }
 
@@ -57,32 +60,43 @@ class _CategoryListViewState extends State<CategoryListView>
           future: getData(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (!snapshot.hasData) {
-              return const SizedBox();
-            } else {
-              return ListView.builder(
-                padding: const EdgeInsets.only(
-                    top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: categories.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  final int count =
-                      categories.length > 10 ? 10 : categories.length;
-                  final Animation<double> animation =
-                      Tween<double>(begin: 0.0, end: 1.0).animate(
-                          CurvedAnimation(
-                              parent: animationController!,
-                              curve: Interval((1 / count) * index, 1.0,
-                                  curve: Curves.fastOutSlowIn)));
-                  animationController?.forward();
-
-                  return CategoryView(
-                    category: categories[index],
-                    animation: animation,
-                    animationController: animationController,
-                    callback: widget.callBack,
-                  );
-                },
+              return SizedBox(
+                width: 50,
+                height: 50,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
               );
+            } else {
+              return categories!.length > 0
+                  ? ListView.builder(
+                      padding: const EdgeInsets.only(
+                          top: 0, bottom: 0, right: 16, left: 16),
+                      itemCount: categories!.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        final int count =
+                            categories!.length > 10 ? 10 : categories!.length;
+                        final Animation<double> animation =
+                            Tween<double>(begin: 0.0, end: 1.0).animate(
+                                CurvedAnimation(
+                                    parent: animationController!,
+                                    curve: Interval((1 / count) * index, 1.0,
+                                        curve: Curves.fastOutSlowIn)));
+                        animationController?.forward();
+
+                        return CategoryView(
+                          category: categories![index],
+                          animation: animation,
+                          animationController: animationController,
+                        );
+                      },
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text('Пусто',
+                          style: TextStyle(color: DesignCourseAppTheme.grey)),
+                    );
             }
           },
         ),
@@ -94,16 +108,25 @@ class _CategoryListViewState extends State<CategoryListView>
 class CategoryView extends StatelessWidget {
   const CategoryView(
       {Key? key,
-      this.category,
+      required this.category,
       this.animationController,
-      this.animation,
-      this.callback})
+      this.animation})
       : super(key: key);
 
-  final VoidCallback? callback;
-  final Category? category;
+  final Category category;
   final AnimationController? animationController;
   final Animation<double>? animation;
+
+  void moveTo(BuildContext context, Category category) {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => CourseInfoScreen(
+          category: category,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +140,9 @@ class CategoryView extends StatelessWidget {
                 100 * (1.0 - animation!.value), 0.0, 0.0),
             child: InkWell(
               splashColor: Colors.transparent,
-              onTap: callback,
+              onTap: () {
+                moveTo(context, category);
+              },
               child: SizedBox(
                 width: 280,
                 child: Stack(

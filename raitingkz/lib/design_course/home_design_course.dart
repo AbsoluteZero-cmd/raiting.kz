@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  CategoryType categoryType = CategoryType.ui;
+  String categoryType = Category.categoryTypes[0];
   final User? currentUser = Auth().currentUser;
 
   @override
@@ -104,17 +104,18 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Row(
             children: <Widget>[
-              getButtonUI(CategoryType.ui, categoryType == CategoryType.ui),
+              getButtonUI(Category.categoryTypes[0],
+                  categoryType == Category.categoryTypes[0]),
               const SizedBox(
                 width: 16,
               ),
-              getButtonUI(
-                  CategoryType.coding, categoryType == CategoryType.coding),
+              getButtonUI(Category.categoryTypes[1],
+                  categoryType == Category.categoryTypes[1]),
               const SizedBox(
                 width: 16,
               ),
-              getButtonUI(
-                  CategoryType.basic, categoryType == CategoryType.basic),
+              getButtonUI(Category.categoryTypes[2],
+                  categoryType == Category.categoryTypes[2]),
             ],
           ),
         ),
@@ -122,9 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 16,
         ),
         CategoryListView(
-          callBack: () {
-            moveTo();
-          },
+          categoryType: categoryType,
         ),
       ],
     );
@@ -138,35 +137,14 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Flexible(
-            child: PopularCourseListView(
-              callBack: () {
-                moveTo();
-              },
-            ),
+            child: PopularCourseListView(),
           )
         ],
       ),
     );
   }
 
-  void moveTo() {
-    Navigator.push<dynamic>(
-      context,
-      MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => CourseInfoScreen(),
-      ),
-    );
-  }
-
-  Widget getButtonUI(CategoryType categoryTypeData, bool isSelected) {
-    String txt = '';
-    if (CategoryType.ui == categoryTypeData) {
-      txt = 'IT';
-    } else if (CategoryType.coding == categoryTypeData) {
-      txt = 'Подача';
-    } else if (CategoryType.basic == categoryTypeData) {
-      txt = 'Школы';
-    }
+  Widget getButtonUI(String categoryTypeData, bool isSelected) {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -189,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
               child: Center(
                 child: Text(
-                  txt,
+                  categoryTypeData,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
@@ -330,10 +308,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-enum CategoryType {
-  ui,
-  coding,
-  basic,
 }
